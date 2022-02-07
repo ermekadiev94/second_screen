@@ -14,7 +14,7 @@ class SecondScreen extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.orange,
         ),
         home: Scaffold(
           appBar: AppBar(
@@ -108,7 +108,7 @@ class SecondScreen extends StatelessWidget {
                           width: 340,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.blue,
+                            color: Colors.orange,
                           ),
                           child: const Center(
                             child: Text(
