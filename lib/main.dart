@@ -3,31 +3,40 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const SecondScreen());
+  runApp(SecondScreen());
 }
 
-class SecondScreen extends StatelessWidget {
-  const SecondScreen({Key? key}) : super(key: key);
+final _formKey = GlobalKey<FormState>();
 
+class SecondScreen extends StatefulWidget {
+  SecondScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SecondScreen> createState() => _SecondScreenState();
+}
+
+bool _isObscure = true;
+
+class _SecondScreenState extends State<SecondScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter textfield'),
         ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Flutter textfield'),
-          ),
-          body: Center(
-              child: Container(
-            height: 450,
+        body: Center(
+          child: Container(
+            height: 480,
             color: Colors.grey[350],
             child: Column(
               children: [
                 Container(
-                  height: 350,
+                  height: 370,
                   decoration: const BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -44,14 +53,14 @@ class SecondScreen extends StatelessWidget {
                       bottomRight: Radius.circular(16),
                     ),
                   ),
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(25, 30, 25, 30),
+                  child: Form(
+                    key: _formKey,
                     child: Column(
-                      // ignore: prefer_const_literals_to_create_immutables
                       children: [
                         Container(
-                          margin: EdgeInsets.only(bottom: 5),
-                          alignment: const Alignment(-0.96, -1.0),
+                          padding:
+                              EdgeInsets.only(top: 10, bottom: 2, left: 18),
+                          alignment: Alignment.topLeft,
                           child: const Text(
                             'Email',
                             style: TextStyle(
@@ -60,66 +69,99 @@ class SecondScreen extends StatelessWidget {
                                 fontSize: 20),
                           ),
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (!value!.contains('@') || value.length < 6) {
+                                return 'Please enter a valid email';
+                              }
+                              return null;
+                            },
+                            autocorrect: false,
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8)),
                               ),
                               labelText: '',
-                              hintText: ' '),
-                        ),
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-                            alignment: const Alignment(-0.30, -1.0),
-                            child: RichText(
-                              text: const TextSpan(
-                                  text: 'Password                ',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: 'Forgot password?',
-                                      style: TextStyle(
-                                          color: Colors.blueAccent,
-                                          fontSize: 18,
-                                          fontStyle: FontStyle.normal,
-                                          letterSpacing: -0.2,
-                                          fontWeight: FontWeight.w400),
-                                    )
-                                  ]),
-                            )),
-                        const TextField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              labelText: '',
-                              hintText: ' '),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 25),
-                          height: 60,
-                          width: 340,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.orange,
+                              hintText: 'Enter your email',
+                            ),
                           ),
-                          child: const Center(
-                            child: Text(
-                              'Log in',
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                          alignment: const Alignment(-0.30, -1.0),
+                          child: RichText(
+                            text: const TextSpan(
+                              text: 'Password                ',
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Forgot password?',
+                                  style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontSize: 18,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: -0.2,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        TextFormField(
+                          obscureText: _isObscure,
+                          validator: (value) => value!.length < 6 ||
+                                  value.contains(r'*@^|\/}{();')
+                              ? 'Password is not valid'
+                              : null,
+                          decoration: InputDecoration(
+                              suffixIcon: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _isObscure = !_isObscure;
+                                    });
+                                  },
+                                  child: const Icon(Icons.remove_red_eye)),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              labelText: '',
+                              hintText: 'Enter your password'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ButtonStyle(),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Processing Data')),
+                                  );
+                                }
+                              },
+                              child: const Text(
+                                'Log in',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -128,19 +170,26 @@ class SecondScreen extends StatelessWidget {
                   height: 57,
                 ),
                 RichText(
-                    textAlign: TextAlign.justify,
-                    text: const TextSpan(
-                        text: "Don't have an account?",
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: 'Sign up',
-                              style: TextStyle(
-                                  color: Colors.blueAccent, fontSize: 20))
-                        ]))
+                  textAlign: TextAlign.justify,
+                  text: const TextSpan(
+                    text: "Don't have an account?  ",
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Sign up',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 20,
+                        ),
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
-          )),
-        ));
+          ),
+        ),
+      ),
+    );
   }
 }
