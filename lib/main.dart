@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:second_screen/custom_field.dart';
+import 'package:second_screen/custom_form.dart';
 
 void main() {
   runApp(SecondScreen());
@@ -53,7 +53,7 @@ class _SecondScreenState extends State<SecondScreen> {
                   child: CustomForm(),
                 ),
                 const SizedBox(
-                  height: 57,
+                  height: 40,
                 ),
                 RichText(
                   textAlign: TextAlign.justify,
